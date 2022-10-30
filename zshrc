@@ -4,7 +4,7 @@ export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="robbyrussell"
 
-plugins=(fancy-ctrl-z fzf git vi-mode zsh-interactive-cd)
+plugins=(fancy-ctrl-z fzf git zsh-interactive-cd)
 
 # User configuration
 export EDITOR="nvim"
