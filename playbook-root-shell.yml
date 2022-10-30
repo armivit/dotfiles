@@ -1,0 +1,48 @@
+---
+- name: Zsh for Roots
+  hosts: all
+  tasks:
+    - name: Install Zsh
+      apt:
+        name: zsh
+        state: latest
+    - name: Install Git
+      apt:
+        name: git
+        state: latest
+    - name: Install Fzf
+      apt:
+        name: fzf
+        state: latest
+    - name: Install Vim
+      apt:
+        name: vim
+        state: latest
+    - name: Get Oh-My-Zsh installer
+      get_url:
+        url: https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+        dest: /root/install_ohmyzsh.sh
+    - name: Set Oh-My-Zsh installer permissions
+      file:
+        path: /root/install_ohmyzsh.sh
+        mode: 0755
+    - name: Install Oh-My-Zsh
+      shell: |
+        cd /root
+        ./install_ohmyzsh.sh
+        sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="jonathan"/' .zshrc
+        sed -i 's/plugins=(git)/plugins=(fzf git zsh-interactive-cd)/' .zshrc
+        echo '' >> .zshrc
+        echo 'export EDITOR="vim"' >> .zshrc
+    - name: Delete Oh-My-Zsh installer
+      file:
+        path: /root/install_ohmyzsh.sh
+        state: absent
+    - name: Delete previous configuration
+      file:
+        path: /root/.zshrc.pre-oh-my-zsh
+        state: absent
+    - name: Change shell
+      user:
+        name: root
+        shell: /bin/zsh
